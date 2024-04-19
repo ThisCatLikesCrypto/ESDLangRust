@@ -1,18 +1,5 @@
-var gar 21
-write hello!
-write you are a guy called gary aged gar
-write you got a package! it's an age reducer!
-var in input accept or not?
-if in = yes
-var gar radnom 14 21
-write your age was reduced, you are now gar years old
-else
-write you are still gar years old
-endstat
-var gar lol
-write gar
-var gar 21
-write test
-var 1e_coehoornstraat input tets
-write 1e_coehoornstraat
+var gar Hello!
+write gar how are you today?
+write haha this doesn't support inputs yet so you don't get to be asked that
+write sorry
 quit
