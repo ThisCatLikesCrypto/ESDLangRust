@@ -1,5 +1,5 @@
 use std::fs::File;
-use std::io::{self, BufRead};
+use std::io::{self, BufRead, Write}; // Import Write trait for flush method
 use std::collections::HashMap;
 
 // Enum to represent variable types
@@ -47,6 +47,26 @@ fn writer(var_handler: &VarHandler, input_list: &[&str]) {
     println!(); // Print new line
 }
 
+// !FIX LATER, BROKEN
+// Function to process "input" command
+fn input_handler(var_handler: &mut VarHandler, input_list: &[&str]) {
+    if input_list.len() == 3 && input_list[0] == "input" {
+        let var_name = input_list[1];
+        let prompt_text = input_list[2..].join(" ");
+        
+        print!("{}: ", prompt_text);
+        io::stdout().flush().expect("Failed to flush stdout");
+        let mut user_input = String::new();
+        io::stdin().read_line(&mut user_input).expect("Failed to read line");
+        user_input = user_input.trim().to_string();
+        
+        // Update variables in VarHandler
+        var_handler.set_variable(var_name, Variable::Str(user_input.clone()));
+    } else {
+        println!("Invalid input syntax for 'input' command. (well, likely not but this is broken atm and needs to be fixed later)");
+    }
+}
+
 fn main() -> io::Result<()> {
     println!("Executing... (ESDLangRust v0.0.1 [Stupid not ful])");
 
@@ -66,10 +86,14 @@ fn main() -> io::Result<()> {
             "var" => {
                 if let Some(name) = input_list.get(1) { // Get variable name
                     if let Some(value) = input_list.get(2) { // Get variable value
-                        if let Ok(num) = value.parse::<f64>() { // Try to parse as number
-                            var_handler.set_variable(name, Variable::Num(num)); // Set as numeric variable
+                        if value == &"input" { // If the value is "input", call input_handler
+                            input_handler(&mut var_handler, &input_list[2..]);
                         } else {
-                            var_handler.set_variable(name, Variable::Str(value.to_string())); // Set as string variable
+                            if let Ok(num) = value.parse::<f64>() { // Try to parse as number
+                                var_handler.set_variable(name, Variable::Num(num)); // Set as numeric variable
+                            } else {
+                                var_handler.set_variable(name, Variable::Str(value.to_string())); // Set as string variable
+                            }
                         }
                     }
                 }
@@ -80,5 +104,3 @@ fn main() -> io::Result<()> {
 
     Ok(()) // Return Ok if execution is successful
 }
-
-

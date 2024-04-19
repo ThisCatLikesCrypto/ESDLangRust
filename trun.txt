@@ -1,5 +1,5 @@
 var gar Hello!
 write gar how are you today?
-write haha this doesn't support inputs yet so you don't get to be asked that
-write sorry
+var howu input Input: 
+write howu
 quit
